@@ -1,14 +1,10 @@
-FROM golang:1.7 AS build
+FROM golang:1.22 as builder
+WORKDIR /usr/src/app
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+COPY . .
+RUN go build -v -o /usr/local/bin/go-flashpaper ./...
 
-WORKDIR /go/src/github.com/Invoca/go-flashpaper
-COPY *.go .
-
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo
-
-FROM alpine
-WORKDIR /
-
-COPY --from=build /go/src/github.com/Invoca/go-flashpaper/go-flashpaper .
-
+ENTRYPOINT ["/usr/local/bin/go-flashpaper"]
+CMD ["-autocert", "true"]
 EXPOSE 8443
-CMD ["./go-flashpaper"]
