@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: go-flashpaper
+  description: Go service for creating one-time-use links to share text or file secrets.
+spec:
+  type: service
+  lifecycle: production
+  owner: group:default/sre-core
+  system: secrets-management
